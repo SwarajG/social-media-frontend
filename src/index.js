@@ -1,17 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { ApolloProvider } from '@apollo/client';
-import { client } from './api/user';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { client } from './api/client';
+import Dashboard from './pages/Dashboard';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <React.StrictMode>
-      <App />
-    </React.StrictMode>
-  </ApolloProvider>,
+  <BrowserRouter>
+    <ApolloProvider client={client}>
+      <React.StrictMode>
+        <Routes>
+          <Route exact path="/" element={<App />} />
+          <Route path="/dashboard" element={<Dashboard />} />
+        </Routes>
+      </React.StrictMode>
+    </ApolloProvider>
+  </BrowserRouter>,
   document.getElementById('root')
 );
 

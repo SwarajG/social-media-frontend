@@ -1,11 +1,11 @@
 import { GoogleLogin } from 'react-google-login';
 import { useMutation } from '@apollo/client';
-import { AUTH_MUTATION } from './mutations/authMutations';
-import { GOOGLE_CLIENT_ID } from './config';
-import './App.css';
+import { AUTH_MUTATION } from '../../mutations/authMutations';
+import { GOOGLE_CLIENT_ID } from '../../config';
+import { setLocalStorage } from '../../utils/localStorage';
 
-function App() {
-  const [authGoogle, { data, loading, error }] = useMutation(AUTH_MUTATION);
+function Auth({ setUser }) {
+  const [authGoogle, { loading, error }] = useMutation(AUTH_MUTATION);
   const googleResponse = (response) => {
     authGoogle({
       variables: {
@@ -13,8 +13,12 @@ function App() {
           accessToken: response.accessToken,
         },
       },
-    }).then((res) => console.log(res));
+    }).then((res) => {
+      setLocalStorage('user', JSON.stringify(res.data.authGoogle));
+      setUser(res.data.authGoogle);
+    });
   };
+
   const onFailure = (error) => {
     console.log(error);
   };
@@ -34,4 +38,4 @@ function App() {
   );
 }
 
-export default App;
+export default Auth;
