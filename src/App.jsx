@@ -5,6 +5,7 @@ import Auth from './pages/Auth';
 import Dashboard from './pages/Dashboard';
 
 function App() {
+  console.log('Hello world');
   const defaultUser = getLocalStorage('user')
     ? JSON.parse(getLocalStorage('user'))
     : null;
