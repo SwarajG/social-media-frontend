@@ -26,11 +26,7 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withCredentials([
-                    string(credentialsId: 'sonarqube-host-url', variable: 'SONARQUBE_HOST_URL'),
-                    string(credentialsId: 'sonarqube-auth-token', variable: 'SONARQUBE_AUTH_TOKEN')
-                ]) {
-                    script {
+                script {
                         def scannerHome = tool 'SonarScanner'
                         withSonarQubeEnv('MySonarQubeServer') {
                             sh """
@@ -44,7 +40,6 @@ pipeline {
                             """
                         }
                     }
-                }
             }
         }
 
