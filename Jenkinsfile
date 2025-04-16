@@ -26,16 +26,24 @@ pipeline {
 
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('MySonarQubeServer') {
-                    sh '''
-                        sonar-scanner \
-                          -Dsonar.projectKey=social-media-frontend \
-                          -Dsonar.sources=. \
-                          -Dsonar.host.url=${SONARQUBE_HOST_URL} \
-                          -Dsonar.login=${SONARQUBE_AUTH_TOKEN} \
-                          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
-                          -Dsonar.exclusions=node_modules/**,coverage/**,**/*.test.js
-                    '''
+                withCredentials([
+                    string(credentialsId: 'sonarqube-host-url', variable: 'SONARQUBE_HOST_URL'),
+                    string(credentialsId: 'sonarqube-auth-token', variable: 'SONARQUBE_AUTH_TOKEN')
+                ]) {
+                    script {
+                        def scannerHome = tool 'SonarScanner'
+                        withSonarQubeEnv('MySonarQubeServer') {
+                            sh """
+                                ${scannerHome}/bin/sonar-scanner \
+                                  -Dsonar.projectKey=social-media-frontend \
+                                  -Dsonar.sources=. \
+                                  -Dsonar.host.url=${SONARQUBE_HOST_URL} \
+                                  -Dsonar.login=${SONARQUBE_AUTH_TOKEN} \
+                                  -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info \
+                                  -Dsonar.exclusions=node_modules/**,coverage/**,**/*.test.js
+                            """
+                        }
+                    }
                 }
             }
         }
