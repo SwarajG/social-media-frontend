@@ -2,11 +2,14 @@ pipeline {
     agent any
     
     environment {
-        SONARQUBE_SCANNER_HOME = tool 'MySonarQubeServer'
+        // SONARQUBE_SCANNER_HOME = tool 'MySonarQubeServer'
+        SONARQUBE_HOST_URL = credentials('sonarqube-host-url')
+        SONARQUBE_AUTH_TOKEN = credentials('sonarqube-auth-token')
     }
     
     tools {
         nodejs 'nodejs-22'
+        sonarQubeScanner 'SonarQubeScanner'
     }
     
     stages {
@@ -24,7 +27,7 @@ pipeline {
         
         stage('SonarQube Analysis') {
             steps {
-                withSonarQubeEnv('SonarQube') {
+                withSonarQubeEnv('MySonarQubeServer') {
                     sh "${SONARQUBE_SCANNER_HOME}/bin/sonar-scanner \
                         -Dsonar.projectKey=social-media-frontend \
                         -Dsonar.sources=. \
