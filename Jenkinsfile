@@ -55,11 +55,13 @@ pipeline {
                 }
             }
         }
+    }
 
-        post {
-            always {
-                cleanWs()
-            }
+    // 👇 GLOBAL POST BLOCK
+    post {
+        always {
+            echo 'Cleaning up workspace...'
+            cleanWs()
         }
     }
 }
