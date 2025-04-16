@@ -20,10 +20,7 @@ pipeline {
 
         stage('Install Dependencies') {
             steps {
-                sh `
-                  npm install -g yarn
-                  yarn install
-                `
+                sh 'npm install -g yarn && yarn install'
             }
         }
 
