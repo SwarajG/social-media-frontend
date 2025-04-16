@@ -47,7 +47,9 @@ pipeline {
     
     post {
         always {
+          node {
             sh 'rm -rf *'
+          }
         }
     }
 }
